@@ -104,6 +104,6 @@ class GithubRepo: CustomStringConvertible {
             "\n\t[Forks: \(self.forks!)]" +
             "\n\t[Owner: \(self.ownerHandle!)]" +
             "\n\t[Avatar: \(self.ownerAvatarURL!)]" +
-            "\n\t[Description: \(self.about!)]"
+            "\n\t[Description: \(self.about)]"
     }
 }

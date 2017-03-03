@@ -14,7 +14,8 @@ class RepoResultsViewController: UIViewController,UITableViewDelegate,UITableVie
 
     var searchBar: UISearchBar!
     var searchSettings = GithubRepoSearchSettings()
-    
+    static var count:Int = 0
+    var num:Int = 0
     @IBOutlet var tableView: UITableView!
     
     var repos: [GithubRepo]!
@@ -22,6 +23,9 @@ class RepoResultsViewController: UIViewController,UITableViewDelegate,UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
+      
+        
+        
         // Initialize the UISearchBar
         searchBar = UISearchBar()
         searchBar.delegate = self
@@ -53,7 +57,7 @@ class RepoResultsViewController: UIViewController,UITableViewDelegate,UITableVie
 
             // Print the returned repositories to the output window
             for repo in newRepos {
-                print(repo)
+                               print(repo)
             }
             self.repos = newRepos
             self.tableView.reloadData()
@@ -64,9 +68,29 @@ class RepoResultsViewController: UIViewController,UITableViewDelegate,UITableVie
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
+        
+        
         if  repos != nil
         {
-            return repos.count;
+            self.num = 0;
+            for repo in repos
+            {
+                if ( Int(repo.stars!) >= RepoResultsViewController.count)
+                {
+                    self.num += 1;
+                }
+                
+                
+            }
+
+            if(RepoResultsViewController.count != 0)
+            {
+                return self.num
+            }
+            else
+            {
+                return repos.count;
+            }
         }
         else
         {
@@ -82,12 +106,21 @@ class RepoResultsViewController: UIViewController,UITableViewDelegate,UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "repoTableViewCell", for: indexPath) as! TableViewCell;
         cell.repo = repos[indexPath.row]
         
-        return cell;
-        
-        
+        if(Int(cell.starCount.text!)! > RepoResultsViewController.count)
+        {
+            return cell;
+        }
+        var emptyCell = tableView.dequeueReusableCell(withIdentifier: "repoTableViewCell", for: indexPath) as! TableViewCell;
+        return emptyCell
+    }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        self.tableView.reloadData()
     }
     
 }
+
+
 
 // SearchBar methods
 extension RepoResultsViewController: UISearchBarDelegate {
